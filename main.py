@@ -292,7 +292,7 @@ class GameManager:
             str: returns the letter enterd by the user if is valid, otherwise, it will return None.
         """
 
-        print('Instructions: Type a letter an press enter.')
+        print('Instructions: Type a letter and press enter.')
         input_letter = input(': ')
 
         if len(input_letter) != 1:
