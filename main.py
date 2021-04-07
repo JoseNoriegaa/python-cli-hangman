@@ -19,7 +19,6 @@ class GameManager:
         self.words = []
 
         self.word_indexes_used = []
-        self.word_idx = None
         self.word = None
         self.guessed_letters = None
 
@@ -29,7 +28,6 @@ class GameManager:
 
     def _render_frame(self):
         """Renders and refresh the main scene."""
-
 
         while True:
             clear()
@@ -45,17 +43,17 @@ class GameManager:
                 self.word_indexes_used = []
                 self._set_game_level()
                 continue
+            
+            if len([letter for letter in self.word if letter not in self.guessed_letters]) == 0:
+                    self._set_game_level()
+                    input('<press enter to continue>')
+                    continue
 
             letter = self._ask_for_letter()
             if letter:
                 is_valid = self._validate_letter(letter)
                 if not is_valid:
                     self.strikes += 1
-
-                
-                if len(self.guessed_letters) == len(self.word):
-                    self._set_game_level()
-
 
     def _render_level(self):
         """Shows the current level on the scene."""
@@ -65,15 +63,14 @@ class GameManager:
         """Sets the word to start the game."""
         self.guessed_letters = set()
         idx = None
-        self.strikes = 0
 
         while idx is None:
             random_index = random.randint(0, len(self.words) - 1)
             if random_index not in self.word_indexes_used:
                 idx = random_index
         
-        self.word_idx = idx
         self.word = self.words[idx]
+        self.word_indexes_used.append(idx)
 
     @staticmethod
     def _normalize_string(string):
@@ -87,7 +84,7 @@ class GameManager:
         """
         assert isinstance(string, str), 'The parameter should be a string.'
 
-        return unicodedata.normalize('NFKD', string).encode('ASCII', 'ignore')
+        return unicodedata.normalize('NFKD', string).encode('ASCII', 'ignore').decode()
 
     def _validate_letter(self, letter):
         """Checks if the provided letter is part of the current word.
