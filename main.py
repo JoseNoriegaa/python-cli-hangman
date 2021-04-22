@@ -22,7 +22,7 @@ class GameManager:
         self.word = None
         self.guessed_letters = None
 
-        self._load_worlds()
+        self._load_words()
         self._set_game_level()
         self._render_frame()
 
@@ -40,6 +40,7 @@ class GameManager:
                 print('=========== GAME OVER ===========')
                 print(f'WORD: {self.word}')
                 input('<press enter to restart the game or ctrl + c to exit>')
+                self.strikes = 0
                 self.word_indexes_used = []
                 self._set_game_level()
                 continue
@@ -118,8 +119,8 @@ class GameManager:
 
         return is_valid
 
-    def _load_worlds(self):
-        """Loads the worlds from a text file."""
+    def _load_words(self):
+        """Loads the words from a text file."""
         base_dir = os.path.dirname(os.path.realpath(__file__))
         
         with open(os.path.join(base_dir, 'data.txt'), 'r', encoding='UTF-8') as file:
